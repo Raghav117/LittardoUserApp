@@ -1,5 +1,5 @@
 import 'package:animated_splash/animated_splash.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/screens/home.dart';
@@ -17,25 +17,25 @@ class PushMessaging extends StatefulWidget {
 class _PushMessagingState extends State<PushMessaging> {
   String _homeScreenText = "Waiting for token...";
   String _messageText = "Waiting for message...";
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
     super.initState();
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
-    _firebaseMessaging.getToken().then((String token) async {
-      assert(token != null);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('fcmtoken', token);
+    // _firebaseMessaging.requestNotificationPermissions(
+    //     const IosNotificationSettings(sound: true, badge: true, alert: true));
+    // _firebaseMessaging.onIosSettingsRegistered
+    //     .listen((IosNotificationSettings settings) {
+    //   print("Settings registered: $settings");
+    // });
+    // _firebaseMessaging.getToken().then((String token) async {
+    //   assert(token != null);
+    //   SharedPreferences prefs = await SharedPreferences.getInstance();
+    //   prefs.setString('fcmtoken', token);
 
-      print(prefs.getString("fcmtoken"));
-      print(token);
-    });
+    //   print(prefs.getString("fcmtoken"));
+    //   print(token);
+    // });
   }
 
   @override
@@ -50,7 +50,7 @@ class _PushMessagingState extends State<PushMessaging> {
         dividerColor: Color(0xFFECEDF1),
         brightness: Brightness.light,
         backgroundColor: Colors.white,
-        primaryColor: Color(0xFFF93963),
+        primaryColor: Color(0xFFf3b656),
         accentColor: Colors.cyan[600],
         fontFamily: 'Montserrat',
         textTheme: TextTheme(

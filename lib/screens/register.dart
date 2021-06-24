@@ -28,6 +28,12 @@ class _RegisterScreen extends State<RegisterScreen> {
           child: Container(
             child: Column(
               children: <Widget>[
+                Image.asset(
+          "assets/littardo_logo.jpg",
+          height: 90,
+          width: 90,
+        ),
+        SizedBox(height: 20,),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(

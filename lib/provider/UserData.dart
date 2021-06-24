@@ -24,9 +24,9 @@ class UserData extends ChangeNotifier {
 
   List<Product> compareList = new List();
 
-  String fcmtoken = "";
+  String fcmtoken = "NA";
 
-  String deviceId = "";
+  String deviceId = "NA";
   String referral_code = "";
   get userData => _userData;
   get fcmKey => fcmtoken;

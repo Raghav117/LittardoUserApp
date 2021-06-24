@@ -34,6 +34,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
             padding: const EdgeInsets.only(top: 96.0),
             child: Column(
               children: <Widget>[
+                Image.asset(
+          "assets/littardo_logo.jpg",
+          height: 80,
+          width: 80,
+        ),
                 Padding(
                   padding: const EdgeInsets.all(32.0),
                   child: Text("Phone Verification",
@@ -91,11 +96,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
                               );
                               }else{
                                  Navigator.pushAndRemoveUntil(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => ForgetPasswordScreen()),
-                                (Route<dynamic> route) => false,
-                              );
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => ForgetPasswordScreen()),
+                                  (Route<dynamic> route) => false,
+                                );
                               }
                             } else {
                               presentToast(data['message'], context, 2);

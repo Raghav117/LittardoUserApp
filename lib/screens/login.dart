@@ -35,6 +35,12 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Container(
             child: Column(
               children: <Widget>[
+                Image.asset(
+          "assets/littardo_logo.jpg",
+          height: 90,
+          width: 90,
+        ),
+        SizedBox(height: 20,),
                 Text("Welcome", style: Theme.of(context).textTheme.title),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
