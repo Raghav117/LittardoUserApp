@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "584660398929",
+    "firebase_url": "https://littardo-9b051.firebaseio.com",
+    "project_id": "littardo-9b051",
+    "storage_bucket": "littardo-9b051.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584660398929:android:cf15a991efc17a158f1970",
+        "android_client_info": {
+          "package_name": "com.ar.deliveryboy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584660398929-8bbu64n310ddq53vd9pra4bns82abl0k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ar.deliveryboy",
+            "certificate_hash": "e90c5861fcee17182e7d3f03e47d2f4fa5c10762"
+          }
+        },
+        {
+          "client_id": "584660398929-3cs8pu0qm8297a8s8ets89t4p8unl4b1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9w24pAloIuE4bGPjr9PiQQWHNbHl1I30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584660398929-3cs8pu0qm8297a8s8ets89t4p8unl4b1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584660398929:android:7de86c68ece3f0518f1970",
+        "android_client_info": {
+          "package_name": "com.ar.littardo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584660398929-3cs8pu0qm8297a8s8ets89t4p8unl4b1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9w24pAloIuE4bGPjr9PiQQWHNbHl1I30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584660398929-3cs8pu0qm8297a8s8ets89t4p8unl4b1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584660398929:android:b860b0aefaf6e2bb8f1970",
+        "android_client_info": {
+          "package_name": "com.littardo.littardo_new"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584660398929-3cs8pu0qm8297a8s8ets89t4p8unl4b1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9w24pAloIuE4bGPjr9PiQQWHNbHl1I30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584660398929-3cs8pu0qm8297a8s8ets89t4p8unl4b1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
