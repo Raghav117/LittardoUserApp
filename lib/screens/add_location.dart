@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:littardo/services/api_services.dart';
 import 'package:littardo/widgets/searchMapPlaceWidget.dart';
 import 'addNewAddrress.dart';
+import 'package:littardo/widgets/submitbutton.dart';
 
 class AddLocation extends StatefulWidget {
   String isCash;
@@ -61,6 +62,7 @@ class _AddLocationState extends State<AddLocation> {
   Map address;
   String from;
   bool firstTime = true;
+  bool showBottomSheet = false;
 
   _AddLocationState(String isCash, Map address, String from) {
     this.isCash = isCash;
@@ -156,12 +158,17 @@ class _AddLocationState extends State<AddLocation> {
     var list = new List<Widget>();
     var mapView = new Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.4,
+      height: MediaQuery.of(context).size.height,
       child: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: _currentPosition,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
+        },
+        onCameraMoveStarted: () {
+           setState(() {
+                    showBottomSheet=false;
+                  });
         },
         markers: markers,
       ),
@@ -169,8 +176,9 @@ class _AddLocationState extends State<AddLocation> {
     list.add(mapView);
     var addressView = Container(
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.4),
-      child: ListView(
+      color: showBottomSheet?Colors.white:Colors.transparent,
+      margin: showBottomSheet?EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.5):EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.7),
+      child: showBottomSheet?ListView(
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -237,32 +245,34 @@ class _AddLocationState extends State<AddLocation> {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                    minWidth: double.infinity, minHeight: 35.0),
-                child: RaisedButton(
-                    child: new Text('CONFIRM'),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AddNewAddress(
-                              isCash,
-                              address,
-                              from,
-                              lattitude,
-                              longitude,
-                              addrMap,
-                              widget.grandTotal,
-                              widget.couponDiscount,
-                              widget.productname,
-                              widget.packageid,widget.type,widget.method)));
-                    },
-                    textColor: Colors.white,
-                    color: Colors.lightGreen,
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)))),
+            child: SubmitButton(
+                title: 'CONFIRM',
+                act: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => AddNewAddress(
+                          isCash,
+                          address,
+                          from,
+                          lattitude,
+                          longitude,
+                          addrMap,
+                          widget.grandTotal,
+                          widget.couponDiscount,
+                          widget.productname,
+                          widget.packageid,widget.type,widget.method)));
+                },),
           ),
         ],
-      ),
+      ):Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SubmitButton(
+                title: 'SET LOCATION',
+                act: () {
+                  setState(() {
+                    showBottomSheet=!showBottomSheet;
+                  });
+                },),
+          ),
     );
     list.add(addressView);
     var searchbar = Positioned(

@@ -37,6 +37,7 @@ import 'checkout.dart';
 import 'products_list.dart';
 import 'categories1.dart';
 import 'subscribed.dart';
+import 'myReturns.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -638,6 +639,19 @@ class _HomeState extends State<Home> {
               Navigator.pop(context);
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => MyOrders()));
+            },
+          ),
+          ListTile(
+            leading: Icon(Feather.getIconData('list'), color: blackColor),
+            title: Text('My Returns',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: blackColor)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => MyReturns()));
             },
           ),
           ListTile(

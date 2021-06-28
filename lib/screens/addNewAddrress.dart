@@ -13,6 +13,7 @@ import 'package:lottie/lottie.dart';
 
 import 'package:littardo/services/api_services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -169,72 +170,95 @@ class _AddNewAddress extends State<AddNewAddress> {
     // TODO: implement build
     return Stack(
       children: <Widget>[
-        SafeArea(
-            child: Scaffold(
-          key: _scaffoldKey,
+       Scaffold(
+         backgroundColor: Colors.white,
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: Colors.blue,
-            leading: new IconButton(
-                icon: new Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => {Navigator.of(context).pop()}),
+              leading: IconButton(
+            icon: Icon(Ionicons.getIconData("ios-arrow-back"),
+                color: Colors.black),
+            onPressed: () => Navigator.pop(context),
+          ),
+            backgroundColor: Colors.white,
             title: Text(
               "Add New Address",
-              style: TextStyle(color: Colors.white, fontSize: 18),
+              style: TextStyle(color: Colors.black),
             ),
           ),
           bottomNavigationBar: BottomAppBar(
-            child: Container(
-              color: Colors.blue,
-              height: 50.0,
-              child: new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new GestureDetector(
-                      onTap: () {
-                        if (customer_name.text == "") {
-                          presentToast('Enter CUSTOMER NAME', context, 0);
-                        } else if (phone_number.text.length < 10) {
-                          presentToast('Enter valid PHONE NUMBER', context, 0);
-                        } else if (!validateEmail(email.text)) {
-                          presentToast('Enter valid EMAIL', context, 0);
-                        } else if (flat_house.text == "") {
-                          presentToast(
-                              'Enter FLAT/HOUSE NO./BUILDING', context, 0);
-                        } else if (street_colony.text == "") {
-                          presentToast('Enter STREET/COLONY', context, 0);
-                        } else if (pin.text == "") {
-                          presentToast('Enter PINCODE', context, 0);
-                        } else if (city.text == "") {
-                          presentToast('Enter CITY', context, 0);
-                        } else if (pinchecked && !serviceAvailable) {
-                          presentToast('Service to this PINCODE not available',
-                              context, 0);
-                        } else if (country.text == "") {
-                          presentToast('Enter COUNTRY', context, 0);
-                        } else if (widget.method=="" && isCash == "") {
-                          presentToast('Select mode of payment', context, 0);
-                        } else {
-                          addAddress();
-                        }
-                      },
-                      child: Text(widget.method!=""?"SUBSCRIBE":"SAVE & PLACE ORDER",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12.0,
-                              color: Colors.white))),
-                ],
-              ),
-            ),
+        child: Container(
+          color: Theme.of(context).primaryColor,
+          height: 50.0,
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new GestureDetector(
+                  onTap: () {
+                    if (customer_name.text == "") {
+                      presentToast('Enter CUSTOMER NAME', context, 0);
+                    } else if (phone_number.text.length < 10) {
+                      presentToast('Enter valid PHONE NUMBER', context, 0);
+                    } else if (!validateEmail(email.text)) {
+                      presentToast('Enter valid EMAIL', context, 0);
+                    } else if (flat_house.text == "") {
+                      presentToast(
+                          'Enter FLAT/HOUSE NO./BUILDING', context, 0);
+                    } else if (street_colony.text == "") {
+                      presentToast('Enter STREET/COLONY', context, 0);
+                    } else if (pin.text == "") {
+                      presentToast('Enter PINCODE', context, 0);
+                    } else if (city.text == "") {
+                      presentToast('Enter CITY', context, 0);
+                    } else if (pinchecked && !serviceAvailable) {
+                      presentToast('Service to this PINCODE not available',
+                          context, 0);
+                    } else if (country.text == "") {
+                      presentToast('Enter COUNTRY', context, 0);
+                    } else if (widget.method=="" && isCash == "") {
+                      presentToast('Select mode of payment', context, 0);
+                    } else {
+                      addAddress();
+                    }
+                  },
+                  child: Text(widget.method!=""?"SUBSCRIBE":"SAVE & PLACE ORDER",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.0,
+                          color: Colors.white))),
+            ],
           ),
-          body: Padding(
-              padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new Text(
-                      "CUSTOMER NAME",
+        ),
+          ),
+          body: SafeArea(
+                      child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new Text(
+                    "CUSTOMER NAME",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                      decoration: TextDecoration.none,
+                    ),
+                    textAlign: TextAlign.left, // has impact
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 18,
+                    child: TextField(
+                        controller: customer_name,
+                        decoration: InputDecoration(
+                            hintText: "",
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 11))),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 14),
+                    child: new Text(
+                      "PHONE NUMBER",
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
@@ -242,185 +266,131 @@ class _AddNewAddress extends State<AddNewAddress> {
                       ),
                       textAlign: TextAlign.left, // has impact
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 18,
-                      child: TextField(
-                          controller: customer_name,
-                          decoration: InputDecoration(
-                              hintText: "",
-                              hintStyle:
-                                  TextStyle(color: Colors.grey, fontSize: 11))),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 14),
-                      child: new Text(
-                        "PHONE NUMBER",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          decoration: TextDecoration.none,
-                        ),
-                        textAlign: TextAlign.left, // has impact
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 18,
-                      child: TextField(
-                          controller: phone_number,
-                          maxLength: 11,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                              counterStyle: TextStyle(
-                                height: double.minPositive,
-                              ),
-                              counterText: "",
-                              hintText: "",
-                              hintStyle:
-                                  TextStyle(color: Colors.grey, fontSize: 11))),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 14),
-                      child: new Text(
-                        "EMAIL",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          decoration: TextDecoration.none,
-                        ),
-                        textAlign: TextAlign.left, // has impact
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 18,
-                      child: TextField(
-                          controller: email,
-                          decoration: InputDecoration(
-                              hintText: "",
-                              hintStyle:
-                                  TextStyle(color: Colors.grey, fontSize: 11))),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 14),
-                      child: new Text(
-                        "FLAT/HOUSE NO./BUILDING",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          decoration: TextDecoration.none,
-                        ),
-                        textAlign: TextAlign.left, // has impact
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 18,
-                      child: TextField(
-                          controller: flat_house,
-                          decoration: InputDecoration(
-                              hintText: "",
-                              hintStyle:
-                                  TextStyle(color: Colors.grey, fontSize: 11))),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 14),
-                      child: new Text(
-                        "STREET/COLONY",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          decoration: TextDecoration.none,
-                        ),
-                        textAlign: TextAlign.left, // has impact
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 18,
-                      child: TextField(
-                          controller: street_colony,
-                          decoration: InputDecoration(
-                              hintText: "",
-                              hintStyle:
-                                  TextStyle(color: Colors.grey, fontSize: 11))),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 14),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              width: MediaQuery.of(context).size.width / 2.4,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  new Text(
-                                    "PINCODE",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                      decoration: TextDecoration.none,
-                                    ),
-                                    textAlign: TextAlign.left, // has impact
-                                  ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height:
-                                        MediaQuery.of(context).size.height / 18,
-                                    child: TextField(
-                                        controller: pin,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 6,
-                                        onChanged: (String text) {},
-                                        decoration: InputDecoration(
-                                            counterStyle: TextStyle(
-                                              height: double.minPositive,
-                                            ),
-                                            counterText: "",
-                                            hintText: "",
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 11))),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 14),
-                                    child: new Text(
-                                      "COUNTRY",
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                        decoration: TextDecoration.none,
-                                      ),
-                                      textAlign: TextAlign.left, // has impact
-                                    ),
-                                  ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height:
-                                        MediaQuery.of(context).size.height / 18,
-                                    child: TextField(
-                                        enabled:
-                                            country.text == "" ? true : false,
-                                        controller: country,
-                                        decoration: InputDecoration(
-                                            hintText: "",
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 11))),
-                                  ),
-                                ],
-                              ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 18,
+                    child: TextField(
+                        controller: phone_number,
+                        maxLength: 11,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            counterStyle: TextStyle(
+                              height: double.minPositive,
                             ),
-                            Spacer(),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 2.4,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  new Text(
-                                    "CITY",
+                            counterText: "",
+                            hintText: "",
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 11))),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 14),
+                    child: new Text(
+                      "EMAIL",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                        decoration: TextDecoration.none,
+                      ),
+                      textAlign: TextAlign.left, // has impact
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 18,
+                    child: TextField(
+                        controller: email,
+                        decoration: InputDecoration(
+                            hintText: "",
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 11))),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 14),
+                    child: new Text(
+                      "FLAT/HOUSE NO./BUILDING",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                        decoration: TextDecoration.none,
+                      ),
+                      textAlign: TextAlign.left, // has impact
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 18,
+                    child: TextField(
+                        controller: flat_house,
+                        decoration: InputDecoration(
+                            hintText: "",
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 11))),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 14),
+                    child: new Text(
+                      "STREET/COLONY",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                        decoration: TextDecoration.none,
+                      ),
+                      textAlign: TextAlign.left, // has impact
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 18,
+                    child: TextField(
+                        controller: street_colony,
+                        decoration: InputDecoration(
+                            hintText: "",
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 11))),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 14),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2.4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                new Text(
+                                  "PINCODE",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                  textAlign: TextAlign.left, // has impact
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.height / 18,
+                                  child: TextField(
+                                      controller: pin,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 6,
+                                      onChanged: (String text) {},
+                                      decoration: InputDecoration(
+                                          counterStyle: TextStyle(
+                                            height: double.minPositive,
+                                          ),
+                                          counterText: "",
+                                          hintText: "",
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 11))),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 14),
+                                  child: new Text(
+                                    "COUNTRY",
                                     style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 12,
@@ -428,19 +398,52 @@ class _AddNewAddress extends State<AddNewAddress> {
                                     ),
                                     textAlign: TextAlign.left, // has impact
                                   ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height:
-                                        MediaQuery.of(context).size.height / 18,
-                                    child: TextField(
-                                        enabled: city.text == "" ? true : false,
-                                        controller: city,
-                                        decoration: InputDecoration(
-                                            hintText: "",
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 11))),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.height / 18,
+                                  child: TextField(
+                                      enabled:
+                                          country.text == "" ? true : false,
+                                      controller: country,
+                                      decoration: InputDecoration(
+                                          hintText: "",
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 11))),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2.4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                new Text(
+                                  "CITY",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                    decoration: TextDecoration.none,
                                   ),
+                                  textAlign: TextAlign.left, // has impact
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.height / 18,
+                                  child: TextField(
+                                      enabled: city.text == "" ? true : false,
+                                      controller: city,
+                                      decoration: InputDecoration(
+                                          hintText: "",
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 11))),
+                                ),
 //                                  Padding(
 //                                    padding: EdgeInsets.only(top: 14),
 //                                    child: new Text(
@@ -465,15 +468,16 @@ class _AddNewAddress extends State<AddNewAddress> {
 //                                                color: Colors.grey,
 //                                                fontSize: 11))),
 //                                  ),
-                                ],
-                              ),
+                              ],
                             ),
-                          ],
-                        )),
-                  ],
-                ),
-              )),
-        )),
+                          ),
+                        ],
+                      )),
+                ],
+              ),
+            )),
+          ),
+        ),
       ],
     );
   }

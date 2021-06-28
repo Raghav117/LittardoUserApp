@@ -118,7 +118,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
               children: [
                 Container(
                     margin: EdgeInsets.only(bottom: 16.0),
-                    height: 148,
+                    height: 135,
                     child: new ClipRRect(
                       borderRadius: new BorderRadius.circular(8.0),
                       child: Stack(

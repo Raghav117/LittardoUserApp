@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/services/api_services.dart';
 import 'package:littardo/widgets/submitbutton.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetais extends StatefulWidget {
@@ -39,9 +40,39 @@ class _OrderDetais extends State<OrderDetais> {
     });
   }
 
+  void submitReturn(String reasonText) {
+    getProgressDialog(context, "Return Request...").show();
+    print(api_url + "orders/returns");
+    var request =
+        new MultipartRequest("POST", Uri.parse(api_url + "orders/return"));
+    request.fields["order_details_id"] = product['id'].toString();
+    request.fields["order_id"] = product['order_id'].toString();
+    request.fields["product_id"] = product['product_id'].toString();
+    request.fields["seller_id"] = product['seller_id'].toString();
+    request.fields["reason"] = reasonText;
+    request.headers['Authorization'] = "Bearer " +
+        Provider.of<UserData>(context, listen: false).userData['api_token'];
+    request.headers['Accept'] = "application/json";
+    request.headers['Content-Type'] = "application/json";
+    request.headers["APP"] = "ECOM";
+    print(request.fields);
+    commonMethod(request).then((onResponse) {
+      onResponse.stream.transform(utf8.decoder).listen((value) async {
+        Map data = json.decode(value);
+        print(data);
+        presentToast(data['message'], context, 0);
+        if (data['code'] == 200) {
+         getOrderDetails();
+         Navigator.pop(context);
+        }
+        getProgressDialog(context, "Return Request...").hide(context);
+      });
+    });
+  }
+
   getOrderDetails() {
     getProgressDialog(context, "Fetching order Details...").show();
-    commeonMethod2(api_url + "orders/${widget.product["order_id"]}",
+    commeonMethod2(api_url + "orders/${widget.product["id"]}",
             Provider.of<UserData>(context, listen: false).userData['api_token'])
         .then((onResponse) async {
       Map data = json.decode(onResponse.body);
@@ -49,7 +80,7 @@ class _OrderDetais extends State<OrderDetais> {
       if (data['code'] == 200) {
         setState(() {
           is_returnable = data['is_returnable'];
-          // product = data['order'];
+          product = data['order'];
         });
       } else {
         presentToast(data['message'], context, 0);
@@ -80,6 +111,7 @@ class _OrderDetais extends State<OrderDetais> {
           ),
         ),
         body: Container(
+          height: double.maxFinite,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/pattern.jpg"),
@@ -250,49 +282,49 @@ class _OrderDetais extends State<OrderDetais> {
                   child: Text("Wrong item was sent",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
                   isDefaultAction: true,
                   onPressed: () {
-                    print("Action 1 is been clicked");
+                    submitReturn("Wrong item was sent");
                   },
                 ),
                 CupertinoActionSheetAction(
                   child: Text("Performance or Quality of the product not adequate",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
                   isDefaultAction: true,
                   onPressed: () {
-                    print("Action 1 is been clicked");
+                    submitReturn("Performance or Quality of the product not adequate");
                   },
                 ),
                 CupertinoActionSheetAction(
                   child: Text("The item is damaged but the box or envelope in which it has been packed is undamaged",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
                   isDefaultAction: true,
                   onPressed: () {
-                    print("Action 1 is been clicked");
+                    submitReturn("The item is damaged but the box or envelope in which it has been packed is undamaged");
                   },
                 ),
                 CupertinoActionSheetAction(
                   child: Text("Item defective or doesn’t work",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
                   isDefaultAction: true,
                   onPressed: () {
-                    print("Action 1 is been clicked");
+                    submitReturn("Item defective or doesn’t work");
                   },
                 ),
                 CupertinoActionSheetAction(
                   child: Text("The item and the box or envelope it came in are both damaged",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
                   isDefaultAction: true,
                   onPressed: () {
-                    print("Action 1 is been clicked");
+                    submitReturn("The item and the box or envelope it came in are both damaged");
                   },
                 ),
                 CupertinoActionSheetAction(
                   child: Text("Different from what was ordered",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
                   isDefaultAction: true,
                   onPressed: () {
-                    print("Action 1 is been clicked");
+                    submitReturn("Different from what was ordered");
                   },
                 ),
                 CupertinoActionSheetAction(
                   child: Text("Any orders item is missing",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
                   isDefaultAction: true,
                   onPressed: () {
-                    print("Action 1 is been clicked");
+                    submitReturn("Any orders item is missing");
                   },
                 ),
                 CupertinoActionSheetAction(
@@ -325,7 +357,7 @@ class _OrderDetais extends State<OrderDetais> {
                                                                         controller:
                                                                             reason,
                                                                         keyboardType:
-                                                                            TextInputType.number,
+                                                                            TextInputType.text,
                                                                         decoration: InputDecoration(
                                                                             counterStyle: TextStyle(
                                                                               height: double.minPositive,
@@ -352,7 +384,7 @@ class _OrderDetais extends State<OrderDetais> {
                                                                     if (reason
                                                                             .text
                                                                             .length <
-                                                                        10) {
+                                                                        1) {
                                                                       presentToast(
                                                                           "Enter reason",
                                                                           context,
@@ -361,15 +393,12 @@ class _OrderDetais extends State<OrderDetais> {
                                                                       Navigator.pop(
                                                                           context,
                                                                           false);
-                                                                      // presentToast(
-                                                                      //     "You will be notified",
-                                                                      //     context,
-                                                                      //     0);
+                                                                      submitReturn(reason.text);
                                                                     }
                                                                   },
                                                                 ),
                                                               ],
-                                                            ));
+                                                            )).then((value) => setState((){reason.clear();}));
                   },
                 )
               ],
