@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/ionicons.dart';
 import 'package:http/http.dart';
+import 'package:littardo/widgets/submitbutton.dart';
 import 'package:provider/provider.dart';
 import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/screens/add_location.dart';
@@ -115,44 +116,18 @@ class _CheckoutState extends State<Checkout> {
                             ),
                           );
                         }),
-                    Container(
-                      margin: EdgeInsets.only(top: 24.0),
-                      child: FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        color: Color(0xFFF93963),
-                        onPressed: () => {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => AddLocation(
-                                  widget.isCash,
-                                  null,
-                                  widget.from,
-                                  widget.grandTotal,
-                                  widget.couponDiscount,
-                                  widget.productname,"","","")))
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 15.0,
-                            horizontal: 10.0,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Expanded(
-                                child: Text(
-                                  "Add New Address",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    SubmitButton(
+                      title: "Add New Address",
+                      act: () => {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AddLocation(
+                                widget.isCash,
+                                null,
+                                widget.from,
+                                widget.grandTotal,
+                                widget.couponDiscount,
+                                widget.productname,"","","")))
+                      } ,
                     ),
                     // Text("Payment method"),
                     // Container(

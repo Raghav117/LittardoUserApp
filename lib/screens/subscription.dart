@@ -10,6 +10,7 @@ import 'package:littardo/widgets/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:littardo/widgets/submitbutton.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -82,9 +83,9 @@ class AnimatedBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     final tween = MultiTrackTween([
       Track("color1").add(Duration(seconds: 3),
-          ColorTween(begin: Colors.orange, end: Colors.yellow.shade900)),
+          ColorTween(begin: Theme.of(context).primaryColor, end: Theme.of(context).primaryColor.withOpacity(0.9))),
       Track("color2").add(Duration(seconds: 3),
-          ColorTween(begin: Colors.orange, end: Colors.yellow.shade600))
+          ColorTween(begin: Theme.of(context).primaryColor, end: Theme.of(context).primaryColor.withOpacity(0.6)))
     ]);
 
     return ControlledAnimation(
@@ -295,41 +296,36 @@ placeOrder(paymentId) {
       offset: pi / 2,
     ));
     list.add(amimate3);
-    var mainView = Padding(
-        padding: EdgeInsets.symmetric(vertical: 15.0),
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.only(top:10.0),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    size: 20,
-                  ),
-                  color: Colors.white,
-                ),
-                Text(
-                  "Subscription Plans \n(${widget.name})",
-                  style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                )
-              ],
+    var mainView = SafeArea(child: Column(children: [
+      Row(
+        children: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              size: 20,
             ),
+            color: Colors.white,
           ),
-          Expanded(
-            child: (child.length > 0)
-                ? manualCarouselDemo
-                : SizedBox(
-                    height: 10,
-                  ),
-          ),
-        ]));
+          Text(
+            "Subscription Plans \n(${widget.name})",
+            style: TextStyle(
+                fontFamily: 'Montserrat',
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
+          )
+        ],
+      ),
+      Expanded(
+        child: (child.length > 0)
+            ? manualCarouselDemo
+            : SizedBox(
+                height: 10,
+              ),
+      ),
+    ]));
     if (subcriptionList.length > 0) {
       list.add(mainView);
     }
@@ -349,7 +345,7 @@ placeOrder(paymentId) {
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               child: Column(children: <Widget>[
                 Container(
-                  color: Colors.orangeAccent,
+                  color: Theme.of(context).primaryColor,
                   width: 400,
                   height: 120,
                   child: Column(
@@ -452,46 +448,20 @@ placeOrder(paymentId) {
                         ),
                       );
                     }),
-                Container(
-                  margin: EdgeInsets.only(top: 24.0),
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    color: Color(0xFFF93963),
-                    onPressed: () => {
-                      
-                          Navigator.pop(context),
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AddLocation(
-                              "",
-                              null,
-                              "",
-                              double.parse(item.amount),
-                              0,
-                              "",selectedpackage_id,selectedtype,"subscribe-package")))
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 10.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              "Add New Address",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                SubmitButton(
+                      title: "Add New Address",
+                      act: () => {
+                    
+                        Navigator.pop(context),
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AddLocation(
+                            "",
+                            null,
+                            "",
+                            double.parse(item.amount),
+                            0,
+                            "",selectedpackage_id,selectedtype,"subscribe-package")))
+                  }
                 ),
               ],
             ),
@@ -502,7 +472,7 @@ placeOrder(paymentId) {
                               // openCheckout(double.parse(item.amount));
                             },
                             textColor: Colors.white,
-                            color: Color(0xff170e50),
+                            color: Color(0xFF3c3790),
                             shape: new RoundedRectangleBorder(
                                 borderRadius:
                                     new BorderRadius.circular(30.0)))),

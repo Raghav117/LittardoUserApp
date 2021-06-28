@@ -12,6 +12,7 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   List notifications = new List();
+  bool serviceCalled = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -39,12 +40,18 @@ class _NotificationPageState extends State<NotificationPage> {
               Navigator.of(context).pop();
             }),
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          return createNotificationListItem(index);
-        },
-        itemCount: notifications.length,
-      ),
+      body: notifications.length > 0
+          ? ListView.builder(
+              itemBuilder: (context, index) {
+                return createNotificationListItem(index);
+              },
+              itemCount: notifications.length,
+            )
+          : serviceCalled
+              ? Center(
+                  child: Image.asset("assets/norecordfound.png"),
+                )
+              : SizedBox(),
     );
   }
 
@@ -62,6 +69,9 @@ class _NotificationPageState extends State<NotificationPage> {
       } else {
         presentToast(data['message'], context, 0);
       }
+      setState(() {
+        serviceCalled = true;
+      });
       getProgressDialog(context, "Fetching address...").hide(context);
     }).catchError((onerr) {
       getProgressDialog(context, "Fetching address...").hide(context);
@@ -136,9 +146,12 @@ class _NotificationPageState extends State<NotificationPage> {
                         notifications[index]['title'],
                         style: TextStyle(fontSize: 16),
                       ),
-                      IconButton(icon: Icon(Icons.close), onPressed: () {
-                         deleteNotification(notifications[index]['id'].toString());
-                      })
+                      IconButton(
+                          icon: Icon(Icons.close,color: Theme.of(context).primaryColor,),
+                          onPressed: () {
+                            deleteNotification(
+                                notifications[index]['id'].toString());
+                          })
                     ],
                   ),
                   Container(

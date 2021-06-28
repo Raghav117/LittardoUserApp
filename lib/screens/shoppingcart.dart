@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/services/api_services.dart';
 import 'package:littardo/utils/navigator.dart';
+import 'package:littardo/widgets/submitbutton.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -263,8 +264,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                                             ? Icon(
                                                                 Icons
                                                                     .check_circle,
-                                                                color:
-                                                                    Colors.red)
+                                                                color:Color(0xFF3c3790))
                                                             : SizedBox(),
                                                       ],
                                                     ),
@@ -315,7 +315,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                                                 Icons
                                                                     .check_circle,
                                                                 color:
-                                                                    Colors.red)
+                                                                    Color(0xFF3c3790))
                                                             : SizedBox(),
                                                       ],
                                                     ),
@@ -366,12 +366,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       Padding(
                         padding: EdgeInsets.only(
                             top: 8.0, left: 8.0, right: 8.0, bottom: 16.0),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          color: Colors.blueGrey,
-                          onPressed: () {
+                        child: SubmitButton(
+                  title: "Checkout",
+                  act: () async {
                             if (isCash == "") {
                               presentToast('Select payment mode', context, 0);
                             } else {
@@ -389,33 +386,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                           : ""),
                                 ),
                               );
-                            }
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 15.0,
-                              horizontal: 10.0,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Text(
-                                    "Checkout",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                            }}
+                      
+                   
+                ), )]))
               )
             : serviceCalled
                 ? Center(
@@ -491,6 +465,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         icon: Icon(
                           Icons.close,
                           size: 26,
+                          color: Theme.of(context).primaryColor,
                         ),
                         onPressed: () {
                           removeCartProduct(

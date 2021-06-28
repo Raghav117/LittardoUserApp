@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:littardo/provider/UserData.dart';
+import 'package:littardo/services/api_services.dart';
+import 'package:littardo/widgets/submitbutton.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetais extends StatefulWidget {
   Map product;
@@ -17,9 +23,39 @@ class _OrderDetais extends State<OrderDetais> {
   Map product;
   String showReview = "";
   List tracking = new List();
+  bool is_returnable = false;
+  TextEditingController reason = new TextEditingController();
 
   _OrderDetais(Map product) {
     this.product = product;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getOrderDetails();
+    });
+  }
+
+  getOrderDetails() {
+    getProgressDialog(context, "Fetching order Details...").show();
+    commeonMethod2(api_url + "orders/${widget.product["order_id"]}",
+            Provider.of<UserData>(context, listen: false).userData['api_token'])
+        .then((onResponse) async {
+      Map data = json.decode(onResponse.body);
+      print(data);
+      if (data['code'] == 200) {
+        setState(() {
+          is_returnable = data['is_returnable'];
+          // product = data['order'];
+        });
+      } else {
+        presentToast(data['message'], context, 0);
+      }
+      getProgressDialog(context, "Fetching order Details...").hide(context);
+    });
   }
 
   @override
@@ -29,12 +65,12 @@ class _OrderDetais extends State<OrderDetais> {
       onWillPop: () {
         Navigator.pop(context, showReview);
       },
-      child: SafeArea(
-          child: Scaffold(
-        backgroundColor: Colors.grey[300],
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           leading: new IconButton(
               icon: new Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () => {Navigator.pop(context, showReview)}),
@@ -43,202 +79,411 @@ class _OrderDetais extends State<OrderDetais> {
             style: TextStyle(color: Colors.black),
           ),
         ),
-        body: SingleChildScrollView(
-            child: Column(
-          children: <Widget>[
-            Container(
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        new Flexible(
-                          child: Padding(
-                            padding:
-                                EdgeInsets.only(left: 10, top: 10, right: 10),
-                            child: new RichText(
-                                text: TextSpan(
-                                    text: "Order ID - ",
-                                    style: TextStyle(
-                                        color: Colors.grey.withOpacity(0.9),
-                                        fontSize: 12),
-                                    children: [
-                                  TextSpan(
-                                      text: product['order']['code'],
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/pattern.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: SafeArea(
+              child: SingleChildScrollView(
+                  child: Column(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          new Flexible(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              child: new RichText(
+                                  text: TextSpan(
+                                      text: "Order ID - ",
                                       style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.none,
-                                      ))
-                                ])),
+                                          color: Colors.grey.withOpacity(0.9),
+                                          fontSize: 12),
+                                      children: [
+                                    TextSpan(
+                                        text: product['order']['code'],
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.none,
+                                        ))
+                                  ])),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: Divider()),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Flexible(
-                          flex: 8,
-                          child: Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: InkWell(
-                              onTap: () {
+                  ),
+
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: InkWell(
+                                onTap: () {
 //                                            Navigator.of(context).push(
 //                                                new MaterialPageRoute(
 //                                                    builder: (context) =>
 //                                                    new ProductDetails(
 //                                                        product['order_details'][0]
 //                                                        ['product'])));
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.all(3.0),
-                                    child: Text(
-                                      product['product']['name'],
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 3),
-                                    child: Text(
-                                      "Ordered On - " + product['created_at'],
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.grey),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 3),
-                                    child: Text(
-                                      "Description -  " +
-                                          product['product']['description'],
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.grey),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 3),
-                                    child: Text(
-                                      "Seller: Littardo Emporium",
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.grey),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 4,
-                          child: InkWell(
-                            onTap: () {
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.all(3.0),
+                                              child: Text(
+                                                product['product']['name'],
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 3),
+                                              child: Text(
+                                                "Ordered On - " +
+                                                    product['created_at'],
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.grey),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        InkWell(
+                                          onTap: () {
 //                                          Navigator.of(context).push(
 //                                              new MaterialPageRoute(
 //                                                  builder: (context) =>
 //                                                  new ProductDetails(
 //                                                      product['order_details'][0]
 //                                                      ['product'])));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ClipRRect(
-                                  child: CachedNetworkImage(
-                                      imageUrl: product['product']
-                                          ['thumbnail_img'],
-                                      height: 120,
-                                      width: 100,
-                                      fit: BoxFit.fill)),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: IntrinsicHeight(
-                            child: Row(
-                          children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: tracking.map((item) {
-                                return Column(
-                                  children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        new Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                28,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                20,
-                                            decoration: new BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.blue,
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ClipRRect(
+                                                child: CachedNetworkImage(
+                                              imageUrl: product['product']
+                                                  ['thumbnail_img'],
+                                              height: 120,
+                                              width: 100,
+                                              fit: BoxFit.fill,
+                                              placeholder: (context, url) => Center(
+                                                  child:
+                                                      new CircularProgressIndicator()),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      new Icon(
+                                                Icons.error,
+                                                size: 100,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
                                             )),
-                                        Wrap(
-                                          direction: Axis.vertical,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 10, top: 10, right: 10),
-                                              child: new Text(
-                                                item['comment'],
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12,
-                                                  decoration:
-                                                      TextDecoration.none,
-                                                ),
-                                                textAlign: TextAlign
-                                                    .start, // has impact
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 10, right: 10),
-                                              child: new Text(
-                                                item['created_at'],
-                                                style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 8,
-                                                  decoration:
-                                                      TextDecoration.none,
-                                                ),
-                                                textAlign: TextAlign
-                                                    .start, // has impact
-                                              ),
-                                            ),
-                                          ],
-                                        )
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                    VerticalDivider(
-                                      thickness: 1,
-                                      color: Colors.blue,
-                                      endIndent: 10,
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 3),
+                                      child: Text(
+                                        "Description -  " +
+                                            product['product']['description'],
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.grey),
+                                      ),
                                     ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 3),
+                                      child: Text(
+                                        "Seller: Littardo Emporium",
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.grey),
+                                      ),
+                                    ),
+                                    is_returnable
+                                        ? Align(
+                                            alignment: Alignment.centerRight,
+                                            child: FlatButton(
+                                              shape: new RoundedRectangleBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        30.0),
+                                              ),
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              onPressed: () {
+                                                return showCupertinoModalPopup(
+                context: context, builder: (context) => CupertinoActionSheet(
+              title: Text("Choose Reason"),
+              message: Text("Select any reason "),
+              actions: <Widget>[
+                CupertinoActionSheetAction(
+                  child: Text("Wrong item was sent",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
+                  isDefaultAction: true,
+                  onPressed: () {
+                    print("Action 1 is been clicked");
+                  },
+                ),
+                CupertinoActionSheetAction(
+                  child: Text("Performance or Quality of the product not adequate",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
+                  isDefaultAction: true,
+                  onPressed: () {
+                    print("Action 1 is been clicked");
+                  },
+                ),
+                CupertinoActionSheetAction(
+                  child: Text("The item is damaged but the box or envelope in which it has been packed is undamaged",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
+                  isDefaultAction: true,
+                  onPressed: () {
+                    print("Action 1 is been clicked");
+                  },
+                ),
+                CupertinoActionSheetAction(
+                  child: Text("Item defective or doesn’t work",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
+                  isDefaultAction: true,
+                  onPressed: () {
+                    print("Action 1 is been clicked");
+                  },
+                ),
+                CupertinoActionSheetAction(
+                  child: Text("The item and the box or envelope it came in are both damaged",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
+                  isDefaultAction: true,
+                  onPressed: () {
+                    print("Action 1 is been clicked");
+                  },
+                ),
+                CupertinoActionSheetAction(
+                  child: Text("Different from what was ordered",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
+                  isDefaultAction: true,
+                  onPressed: () {
+                    print("Action 1 is been clicked");
+                  },
+                ),
+                CupertinoActionSheetAction(
+                  child: Text("Any orders item is missing",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
+                  isDefaultAction: true,
+                  onPressed: () {
+                    print("Action 1 is been clicked");
+                  },
+                ),
+                CupertinoActionSheetAction(
+                  child: Text("Others",style: TextStyle(fontSize: 14,color: Colors.grey.shade500),),
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (context) =>
+                                                            AlertDialog(
+                                                              title: Text(
+                                                                  "Return"),
+                                                              content:
+                                                                  SingleChildScrollView(
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              4.0),
+                                                                      child:
+                                                                          TextField(
+                                                                        autofocus:
+                                                                            true,
+                                                                        controller:
+                                                                            reason,
+                                                                        keyboardType:
+                                                                            TextInputType.number,
+                                                                        decoration: InputDecoration(
+                                                                            counterStyle: TextStyle(
+                                                                              height: double.minPositive,
+                                                                            ),
+                                                                            counterText: "",
+                                                                            labelText: "Enter Reason",
+                                                                            contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                                                                            border: OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.circular(5.0),
+                                                                              borderSide: BorderSide(),
+                                                                            )),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              actions: <Widget>[
+                                                                FlatButton(
+                                                                  child: Text(
+                                                                      "Submit",style: TextStyle(color: Theme
+                                                                      .of(context).primaryColor),),
+                                                                  onPressed:
+                                                                      () {
+                                                                    if (reason
+                                                                            .text
+                                                                            .length <
+                                                                        10) {
+                                                                      presentToast(
+                                                                          "Enter reason",
+                                                                          context,
+                                                                          2);
+                                                                    } else {
+                                                                      Navigator.pop(
+                                                                          context,
+                                                                          false);
+                                                                      // presentToast(
+                                                                      //     "You will be notified",
+                                                                      //     context,
+                                                                      //     0);
+                                                                    }
+                                                                  },
+                                                                ),
+                                                              ],
+                                                            ));
+                  },
+                )
+              ],
+));
+                                                
+                                              },
+                                              child: new Container(
+                                                width: 60,
+                                                height: 30,
+                                                child: new Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    new Expanded(
+                                                      child: Text(
+                                                        "Return",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox()
                                   ],
-                                );
-                              }).toList(),
+                                ),
+                              ),
                             ),
-                          ],
-                        ))),
-                    Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: Divider()),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: IntrinsicHeight(
+                          child: Row(
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: tracking.map((item) {
+                              return Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      new Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              28,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              20,
+                                          decoration: new BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.blue,
+                                          )),
+                                      Wrap(
+                                        direction: Axis.vertical,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 10, top: 10, right: 10),
+                                            child: new Text(
+                                              item['comment'],
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12,
+                                                decoration: TextDecoration.none,
+                                              ),
+                                              textAlign:
+                                                  TextAlign.start, // has impact
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: new Text(
+                                              item['created_at'],
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 8,
+                                                decoration: TextDecoration.none,
+                                              ),
+                                              textAlign:
+                                                  TextAlign.start, // has impact
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  VerticalDivider(
+                                    thickness: 1,
+                                    color: Colors.blue,
+                                    endIndent: 10,
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ))),
+                  Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: Divider()),
 //                                Padding(
 //                                    padding: EdgeInsets.only(
 //                                        left: 10, right: 10),
@@ -293,14 +538,9 @@ class _OrderDetais extends State<OrderDetais> {
 //                                            : SizedBox(),
 //                                      ],
 //                                    )),
-                    SizedBox(
-                      height: 10,
-                    )
-                  ],
-                )),
-            SizedBox(
-              height: 8,
-            ),
+                ],
+              ),
+
 //                        Container(
 //                          color: Colors.white,
 //                          child: Padding(
@@ -326,90 +566,90 @@ class _OrderDetais extends State<OrderDetais> {
 //                        SizedBox(
 //                          height: 8,
 //                        ),
-            Container(
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        new Flexible(
-                          child: Padding(
-                            padding:
-                                EdgeInsets.only(left: 10, top: 10, right: 10),
-                            child: new Text(
-                              "Shipping Address",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                decoration: TextDecoration.none,
-                              ),
-                              textAlign: TextAlign.center, // has impact
+              Card(
+                  child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      new Flexible(
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 10, right: 10),
+                          child: new Text(
+                            "Shipping Address",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              decoration: TextDecoration.none,
                             ),
+                            textAlign: TextAlign.center, // has impact
                           ),
                         ),
-                      ],
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: Divider(
-                          thickness: 1,
-                        )),
-                    Row(
-                      children: <Widget>[
-                        new Flexible(
-                          child: Padding(
-                            padding:
-                                EdgeInsets.only(left: 10, top: 10, right: 10),
-                            child: new Text(
-                              product['order']['shipping_address']['name'],
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.none,
-                              ),
-                              textAlign: TextAlign.center, // has impact
+                      ),
+                    ],
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: Divider(
+                        thickness: 1,
+                      )),
+                  Row(
+                    children: <Widget>[
+                      new Flexible(
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 10, right: 10),
+                          child: new Text(
+                            product['order']['shipping_address']['name'],
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.none,
                             ),
+                            textAlign: TextAlign.center, // has impact
                           ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        new Flexible(
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                left: 10, top: 10, bottom: 10, right: 10),
-                            child: new Text(
-                              product['order']['shipping_address']['address'] +
-                                  ", " +
-                                  product['order']['shipping_address']['city'] +
-                                  ", " +
-                                  product['order']['shipping_address']
-                                      ['country'] +
-                                  ", PIN - " +
-                                  product['order']['shipping_address']
-                                      ['postal_code'],
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                decoration: TextDecoration.none,
-                              ),
-                              textAlign: TextAlign.center, // has impact
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      new Flexible(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 10, top: 10, bottom: 10, right: 10),
+                          child: new Text(
+                            product['order']['shipping_address']['address'] +
+                                ", " +
+                                product['order']['shipping_address']['city'] +
+                                ", " +
+                                product['order']['shipping_address']
+                                    ['country'] +
+                                ", PIN - " +
+                                product['order']['shipping_address']
+                                    ['postal_code'],
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              decoration: TextDecoration.none,
                             ),
+                            textAlign: TextAlign.center, // has impact
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                )),
-            SizedBox(
-              height: 8,
-            ),
-            priceSection()
-          ],
-        )),
-      )),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+              SizedBox(
+                height: 8,
+              ),
+              priceSection()
+            ],
+          ))),
+        ),
+      ),
     );
   }
 

@@ -22,36 +22,46 @@ class TrendingItem extends StatelessWidget {
     return GestureDetector(
       child: Stack(
         children: <Widget>[
-          Container(
-            width: trendCardWidth,
+          Padding(
+            padding: const EdgeInsets.all(5.0),
             child: Card(
-              elevation: 2,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Spacer(),
-                        InkWell(
-                          onTap: updateWishList,
-                          child: Icon(
-                            Ionicons.getIconData(product.isWishlisted == "1"
-                                ? "ios-heart"
-                                : "ios-heart-empty"),
-                            color: Colors.black54,
-                          ),
-                        )
-                      ],
-                    ),
-                    _productImage(),
-                    _productDetails()
-                  ],
+                           elevation: 4,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    
+                         
+                        child: Container(
+                width: trendCardWidth,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Column(
+                    children: <Widget>[
+                      _productImage(),
+                      _productDetails(context)
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
+          ),Positioned(
+            right: 0,
+                      child: InkWell(
+                            onTap: updateWishList,
+                            child: Card(
+                             elevation: 4,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(6.0),
+                                                        child: Icon(
+                                Ionicons.getIconData(product.isWishlisted == "1"
+                                    ? "ios-heart"
+                                    : "ios-heart-empty"),
+                                color: product.isWishlisted == "1"?Colors.red:Colors.grey.shade300,
+                              ),
+                                                      ),
+                            ),
+                          ),
+          )
         ],
       ),
       onTap: () {
@@ -76,27 +86,23 @@ class TrendingItem extends StatelessWidget {
   }
 
   _productImage() {
-    return Stack(
-      children: <Widget>[
-        Center(
-          child: Container(
-            width: 75,
-            height: 75,
-            child: Image.network(
-              product.icon,
-              errorBuilder: (context, _, __) {
-                return Image.asset("assets/littardo_logo.jpg");
-              },
-            ),
-          ),
-        )
-      ],
+    return Container(
+      width: 75,
+      height: 90,
+      child: Image.network(
+        product.icon,
+        errorBuilder: (context, _, __) {
+          return Image.asset("assets/littardo_logo.jpg");
+        },
+      ),
     );
   }
 
-  _productDetails() {
+  _productDetails(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         // Text(
         //   product.company,
@@ -119,7 +125,7 @@ class TrendingItem extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: Colors.red)),
+                            color: Theme.of(context).primaryColor)),
                     SizedBox(
                       width: 6,
                     ),

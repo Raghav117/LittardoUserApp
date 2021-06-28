@@ -10,6 +10,7 @@ import 'package:littardo/services/api_services.dart';
 import 'package:littardo/utils/countrydropdown.dart';
 import 'package:littardo/utils/progressdialog.dart';
 import 'package:littardo/widgets/socialbottomsheet.dart';
+import 'package:littardo/widgets/submitbutton.dart';
 
 class VerifyScreeen extends StatefulWidget {
   final Map user;
@@ -41,7 +42,11 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
           child: Padding(
             padding: const EdgeInsets.only(top: 96.0),
             child: Column(
-              children: <Widget>[
+              children: <Widget>[   Image.asset(
+          "assets/littardo_logo.jpg",
+          height: 90,
+          width: 90,
+        ),
                 Padding(
                   padding: const EdgeInsets.all(32.0),
                   child: Text("Verify your phone number",
@@ -166,12 +171,9 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
                     child: new Row(
                       children: <Widget>[
                         new Expanded(
-                          child: new FlatButton(
-                            shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(4.0),
-                            ),
-                            color: Color(0xFFF93963),
-                            onPressed: () async {
+                          child: SubmitButton(
+                  title: "Next",
+                  act: () async {
                               if (_txtNumber.text.length == 10) {
                                 getProgressDialog(context, "Verifying").show();
                                 var request = MultipartRequest("POST",
@@ -209,26 +211,26 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
                                 });
                               }
                             },
-                            child: new Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 15.0,
-                                horizontal: 10.0,
-                              ),
-                              child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  new Expanded(
-                                    child: Text(
-                                      "Next",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            // child: new Container(
+                            //   padding: const EdgeInsets.symmetric(
+                            //     vertical: 15.0,
+                            //     horizontal: 10.0,
+                            //   ),
+                            //   child: new Row(
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     children: <Widget>[
+                            //       new Expanded(
+                            //         child: Text(
+                            //           "Next",
+                            //           textAlign: TextAlign.center,
+                            //           style: TextStyle(
+                            //               color: Colors.white,
+                            //               fontWeight: FontWeight.bold),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                           ),
                         ),
                       ],

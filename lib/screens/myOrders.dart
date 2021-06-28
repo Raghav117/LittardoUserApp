@@ -207,7 +207,6 @@ class _MyOrders extends State<MyOrders> {
                                               ],
                                             ),
                                           ),
-                                          Spacer(),
                                           Container(
                                               width: MediaQuery.of(context)
                                                       .size
@@ -226,7 +225,10 @@ class _MyOrders extends State<MyOrders> {
                                                               ['thumbnail_img'],
                                                           height: 120,
                                                           width: 100,
-                                                          fit: BoxFit.fill)))),
+                                                          fit: BoxFit.fill,
+                                                           placeholder: (context, url) => Center(child: new CircularProgressIndicator()),
+   errorWidget: (context, url, error) => new Icon(Icons.error,color: Theme.of(context).primaryColor,size: 40,),),
+                       ))),
                                         ],
                                       ),
                                     ),

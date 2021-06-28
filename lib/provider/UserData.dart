@@ -62,7 +62,7 @@ class UserData extends ChangeNotifier {
 
   Future<void> getLoggedInData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    fcmtoken = prefs.getString("fcmtoken");
+    fcmtoken = prefs.getString("fcmtoken")!=null?prefs.getString("fcmtoken"):"NA";
     notifyListeners();
     if(prefs.getString("token")!=null){
 _userData = jsonDecode(prefs.getString("user"));

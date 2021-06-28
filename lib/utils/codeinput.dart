@@ -193,7 +193,7 @@ abstract class CodeInputBuilders {
       totalRadius: totalRadius,
       emptyRadius: emptyRadius,
       filledRadius: filledRadius,
-      color: Color(0xFFF93963),
+      color: Color(0xFF3c3790),
       textStyle: TextStyle(
           color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
       border: null,

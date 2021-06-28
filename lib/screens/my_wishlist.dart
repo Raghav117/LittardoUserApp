@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:http/http.dart';
 import 'package:littardo/models/product.dart';
 import 'package:littardo/provider/UserData.dart';
@@ -32,12 +33,18 @@ class _MyWishList extends State<MyWishList> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
-        title: Text(
-          "My Wishlist",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+            elevation: 0,
+              leading: IconButton(
+            icon: Icon(Ionicons.getIconData("ios-arrow-back"),
+                color: Colors.black),
+            onPressed: () => Navigator.pop(context),
+          ),
+            backgroundColor: Colors.white,
+            title: Text(
+              "My Wishlist",
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
       body: (wishListData.length > 0 && serviceCalled)
           ? ListView.builder(
               scrollDirection: Axis.vertical,
@@ -121,7 +128,9 @@ class _MyWishList extends State<MyWishList> {
                                 ['thumbnail_img'],
                             height: 120,
                             width: 100,
-                            fit: BoxFit.fill),
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) => Center(child: new CircularProgressIndicator()),
+   errorWidget: (context, url, error) => new Icon(Icons.error,color: Theme.of(context).primaryColor,),),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Wrap(

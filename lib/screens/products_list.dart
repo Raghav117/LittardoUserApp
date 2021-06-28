@@ -70,185 +70,192 @@ class _ProductListState extends State<ProductList> {
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
     final double itemWidth = size.width / 2;
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: showSearchField
-            ? TextField(
-                controller: searchController,
-                autofocus: true,
-                style: new TextStyle(
-                  color: Colors.black,
-                ),
-                decoration: new InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Search",
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.orangeAccent,
-                      ),
-                      onPressed: () {
-                        if (searchController.text == "") {
-                          presentToast("Please enter search query", context, 2);
-                        } else {
-                          serachQuery(searchController.text);
-                        }
-                      },
-                    )),
-              )
-            : Text(
-                lastQuery != "" ? lastQuery : widget.name,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-        leading: IconButton(
-          icon:
-              Icon(Ionicons.getIconData("ios-arrow-back"), color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: SizedBox(
-              height: 18.0,
-              width: 18.0,
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    showSearchField = !showSearchField;
-                  });
-                },
-                icon: Icon(
-                  MaterialCommunityIcons.getIconData(
-                      !showSearchField ? "magnify" : "close"),
-                  color: Colors.black,
-                ),
-              ),
-            ),
+    return Stack(
+      children: [
+        Container( decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/pattern.jpg"),
+            fit: BoxFit.cover,
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 24.0),
-            child: SizedBox(
-              height: 18.0,
-              width: 18.0,
-              child: IconButton(
-                icon: Icon(
-                  MaterialCommunityIcons.getIconData("cart-outline"),
-                ),
-                color: Colors.black,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.fade,
-                      child: ShoppingCart(true),
+        ),),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: showSearchField
+                ? TextField(
+                    controller: searchController,
+                    autofocus: true,
+                    style: new TextStyle(
+                      color: Colors.black,
                     ),
-                  );
-                },
-              ),
+                    decoration: new InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Search",
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            Icons.search,
+                            color: Colors.orangeAccent,
+                          ),
+                          onPressed: () {
+                            if (searchController.text == "") {
+                              presentToast("Please enter search query", context, 2);
+                            } else {
+                              serachQuery(searchController.text);
+                            }
+                          },
+                        )),
+                  )
+                : Text(
+                    lastQuery != "" ? lastQuery : widget.name,
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+            leading: IconButton(
+              icon:
+                  Icon(Ionicons.getIconData("ios-arrow-back"), color: Colors.black),
+              onPressed: () => Navigator.pop(context),
             ),
-          ),
-        ],
-        backgroundColor: Colors.white,
-      ),
-      body: SlidingUpPanel(
-        controller: slidingUpController,
-        minHeight: 42,
-        color: Colors.blueGrey,
-        panel: Filtre(
-          productCallBack: getProductListFromFilter,
-        ),
-        collapsed: Container(
-          decoration:
-              BoxDecoration(color: Colors.blueGrey, borderRadius: radius),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.arrow_upward,
-                  color: Colors.white,
-                  size: 16,
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: SizedBox(
+                  height: 18.0,
+                  width: 18.0,
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        showSearchField = !showSearchField;
+                      });
+                    },
+                    icon: Icon(
+                      MaterialCommunityIcons.getIconData(
+                          !showSearchField ? "magnify" : "close"),
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
-              Text(
-                "Filter",
-                style: TextStyle(color: Colors.white),
+              Padding(
+                padding: const EdgeInsets.only(right: 24.0),
+                child: SizedBox(
+                  height: 18.0,
+                  width: 18.0,
+                  child: IconButton(
+                    icon: Icon(
+                      MaterialCommunityIcons.getIconData("cart-outline"),
+                    ),
+                    color: Colors.black,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.fade,
+                          child: ShoppingCart(true),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
+            backgroundColor: Colors.white,
+          ),
+          body: SlidingUpPanel(
+            controller: slidingUpController,
+            minHeight: 42,
+            color: Colors.blueGrey,
+            panel: Filtre(
+              productCallBack: getProductListFromFilter,
+            ),
+            collapsed: Container(
+              decoration:
+                  BoxDecoration(color: Colors.blueGrey, borderRadius: radius),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.arrow_upward,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  ),
+                  Text(
+                    "Filter",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            borderRadius: radius,
+            body: productList.length > 0
+                ? Container(
+                    padding: EdgeInsets.only(top: 18),
+                    child: LayoutBuilder(builder: (c, data) {
+                      return LazyLoadScrollView(
+                        onEndOfPage: () => fetchProducts(widget.type == "cat"
+                            ? "products?sub_sub_category_id="
+                            : "products?brand_id="),
+                        scrollOffset: 100,
+                        child: GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, crossAxisSpacing: 4, mainAxisSpacing: 2),
+                            padding: EdgeInsets.all(8),
+                            itemCount: productList.length,
+                            controller: ScrollController(keepScrollOffset: false),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Center(
+                                child: TrendingItem(
+                                  updateWishList: () {
+                                    addToWishList(
+                                        productList[index]['wishlisted_count'] ==
+                                                "1"
+                                            ? "wishlist/remove"
+                                            : "wishlist/add",
+                                        productList[index]["id"].toString(),
+                                        index);
+                                  },
+                                  product: Product(
+                                      id: productList[index]['id'].toString(),
+                                      name: productList[index]['name'],
+                                      icon: productList[index]['thumbnail_img'],
+                                      rating: double.parse(
+                                          productList[index]['rating']),
+                                      remainingQuantity: 5,
+                                      price: productList[index]['discounted_price'],
+                                      isWishlisted: productList[index]
+                                          ['wishlisted_count'],
+                                      originalPrice: productList[index]
+                                          ['unit_price'],
+                                      discount: productList[index]['discount'],
+                                      description: productList[index]
+                                          ['description'],
+                                      photos: productList[index]['photos'],
+                                      currentStock: productList[index]
+                                          ['current_stock'],
+                                      shippingCost: productList[index]
+                                              ['shipping_cost']
+                                          .toString()),
+                                  gradientColors: [
+                                    Color(0XFFa466ec),
+                                    Colors.purple[400]
+                                  ],
+                                ),
+                              );
+                            }),
+                      );
+                    }))
+                : serviceCalled
+                    ? Center(
+                        child: Image.asset("assets/norecordfound.png"),
+                      )
+                    : SizedBox(),
           ),
         ),
-        borderRadius: radius,
-        body: productList.length > 0
-            ? Container(
-                padding: EdgeInsets.only(top: 18),
-                child: LayoutBuilder(builder: (c, data) {
-                  return LazyLoadScrollView(
-                    onEndOfPage: () => fetchProducts(widget.type == "cat"
-                        ? "products?sub_sub_category_id="
-                        : "products?brand_id="),
-                    scrollOffset: 100,
-                    child: GridView.builder(
-                        gridDelegate:
-                            new SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 3.0,
-                          childAspectRatio: (itemWidth / itemHeight) * 1.1,
-                          mainAxisSpacing: 3.0,
-                        ),
-                        itemCount: productList.length,
-                        controller: ScrollController(keepScrollOffset: false),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Center(
-                            child: TrendingItem(
-                              updateWishList: () {
-                                addToWishList(
-                                    productList[index]['wishlisted_count'] ==
-                                            "1"
-                                        ? "wishlist/remove"
-                                        : "wishlist/add",
-                                    productList[index]["id"].toString(),
-                                    index);
-                              },
-                              product: Product(
-                                  id: productList[index]['id'].toString(),
-                                  name: productList[index]['name'],
-                                  icon: productList[index]['thumbnail_img'],
-                                  rating: double.parse(
-                                      productList[index]['rating']),
-                                  remainingQuantity: 5,
-                                  price: productList[index]['discounted_price'],
-                                  isWishlisted: productList[index]
-                                      ['wishlisted_count'],
-                                  originalPrice: productList[index]
-                                      ['unit_price'],
-                                  discount: productList[index]['discount'],
-                                  description: productList[index]
-                                      ['description'],
-                                  photos: productList[index]['photos'],
-                                  currentStock: productList[index]
-                                      ['current_stock'],
-                                  shippingCost: productList[index]
-                                          ['shipping_cost']
-                                      .toString()),
-                              gradientColors: [
-                                Color(0XFFa466ec),
-                                Colors.purple[400]
-                              ],
-                            ),
-                          );
-                        }),
-                  );
-                }))
-            : serviceCalled
-                ? Center(
-                    child: Image.asset("assets/norecordfound.png"),
-                  )
-                : SizedBox(),
-      ),
+      ],
     );
   }
 

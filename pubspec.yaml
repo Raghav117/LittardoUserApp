@@ -37,7 +37,8 @@ dependencies:
   animated_splash: ^1.0.0
   flutter_rating_bar: ^3.0.1+1
   lottie: ^0.2.2
-  # firebase_messaging: ^6.0.13
+  firebase_messaging: ^7.0.3
+  firebase_analytics: ^6.0.2
   device_info: ^0.4.2+4
   geocoder: ^0.2.1
   google_maps_flutter: ^0.5.31

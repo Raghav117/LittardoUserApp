@@ -65,8 +65,8 @@ class _HomeState extends State<Home> {
       length: 2,
       child: Consumer<UserData>(builder: (context, userData, child) {
         userDataProvider = userData;
-        return Scaffold(
-          backgroundColor: Colors.white,
+        return Scaffold(extendBodyBehindAppBar: true,
+          backgroundColor: Colors.transparent,
           key: _scaffoldKey,
           drawer: Drawer(child: leftDrawerMenu()),
           appBar: buildAppBar(context),
@@ -91,122 +91,146 @@ class _HomeState extends State<Home> {
           //   indicatorPadding: EdgeInsets.all(8.0),
           //   indicatorColor: Colors.red,
           // ),
-          body: TabBarView(
-            children: [
-              Container(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      CategoriesListView(),
-                      userDataProvider.bannerOffersWidget.length > 0
-                          ? buildCarouselSlider()
-                          : SizedBox(),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                "Hot Deals",
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      buildTrending(userDataProvider.gethot_deals, "hotdeals"),
-                      Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                "Featured Products",
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      buildTrending(userDataProvider.getfeatured, "featured"),
-                      Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                "Best Selling",
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      buildTrending(
-                          userDataProvider.getbestselling, "bestselling"),
-                      Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                "Top Brands",
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
+          body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/pattern.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+            child: SafeArea(
+                          child: TabBarView(
+                children: [
+                  Container(
+                    child: SingleChildScrollView(
+                      child: Column(
                         children: <Widget>[
-                          Container(
-                            height: 160,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: List.generate(
-                                  userDataProvider.getbrands.length, (index) {
-                                return TrendingItem(
-                                  updateWishList: () {},
-                                  product: Product(
-                                      id: userDataProvider.getbrands[index]
-                                              ["id"]
-                                          .toString(),
-                                      name: userDataProvider.getbrands[index]
-                                          ["name"],
-                                      icon: userDataProvider.getbrands[index]
-                                          ["logo"],
-                                      type: "brand"),
-                                  gradientColors: [
-                                    Color(0XFFa466ec),
-                                    Colors.purple[400]
-                                  ],
-                                );
-                              }),
+                          SizedBox(height: 10,),
+                          CategoriesListView(),
+                          SizedBox(height: 10,),
+                          userDataProvider.bannerOffersWidget.length > 0
+                              ? buildCarouselSlider()
+                              : SizedBox(),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Hot Deals",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          )
+                          ),
+                          buildTrending(userDataProvider.gethot_deals, "hotdeals"),
+                          Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Featured Products",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          buildTrending(userDataProvider.getfeatured, "featured"),
+                          Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Best Selling",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          buildTrending(
+                              userDataProvider.getbestselling, "bestselling"),
+                          Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Top Brands",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                height: 160,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: List.generate(
+                                      userDataProvider.getbrands.length, (index) {
+                                    return TrendingItem(
+                                      updateWishList: () {},
+                                      product: Product(
+                                          id: userDataProvider.getbrands[index]
+                                                  ["id"]
+                                              .toString(),
+                                          name: userDataProvider.getbrands[index]
+                                              ["name"],
+                                          icon: userDataProvider.getbrands[index]
+                                              ["logo"],
+                                          type: "brand"),
+                                      gradientColors: [
+                                        Color(0XFFa466ec),
+                                        Colors.purple[400]
+                                      ],
+                                    );
+                                  }),
+                                ),
+                              )
+                            ],
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  ShoppingCart(false),
+                ],
               ),
-              ShoppingCart(false),
-            ],
+            ),
           ),
         );
       }),
@@ -306,6 +330,7 @@ class _HomeState extends State<Home> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      elevation: 0,
       title: showSearchField
           ? TextField(
               controller: searchController,
@@ -380,7 +405,7 @@ class _HomeState extends State<Home> {
           },
         ),
       ],
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -512,7 +537,7 @@ class _HomeState extends State<Home> {
           ListTile(
             trailing: Icon(
               Ionicons.getIconData('ios-radio-button-on'),
-              color: Color(0xFFFB7C7A),
+              color: Color(0xFF3c3790),
               size: 18,
             ),
             leading: Icon(Feather.getIconData('briefcase'), color: blackColor),
@@ -551,7 +576,7 @@ class _HomeState extends State<Home> {
           ListTile(
             trailing: Icon(
               Ionicons.getIconData('ios-radio-button-on'),
-              color: Color(0xFFFB7C7A),
+              color: Color(0xFF3c3790),
               size: 18,
             ),
             leading: Icon(Feather.getIconData('bell'), color: blackColor),
@@ -718,82 +743,74 @@ class CategoriesListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: LinePainter(),
-      child: Column(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(top: 12),
-            height: 90,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: Provider.of<UserData>(context, listen: false)
-                  .getcategories
-                  .length,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.fade,
-                        ctx: context,
-                        child: SubCategoryPage(
-                          categoryId:
-                              Provider.of<UserData>(context, listen: false)
-                                  .getcategories[index]["id"]
-                                  .toString(),
-                          categoryName:
-                              Provider.of<UserData>(context, listen: false)
-                                  .getcategories[index]["name"],
+      child: Container(
+        height: 120,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemCount: Provider.of<UserData>(context, listen: false)
+              .getcategories
+              .length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.fade,
+                    ctx: context,
+                    child: SubCategoryPage(
+                      categoryId:
+                          Provider.of<UserData>(context, listen: false)
+                              .getcategories[index]["id"]
+                              .toString(),
+                      categoryName:
+                          Provider.of<UserData>(context, listen: false)
+                              .getcategories[index]["name"],
+                    ),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Card( elevation: 4,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft:Radius.circular(20),bottomRight:Radius.circular(20))),
+                  
+                                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: CachedNetworkImage(
+                          imageUrl: Provider.of<UserData>(context,
+                                  listen: false)
+                              .getcategories[index]['icon'],
                         ),
                       ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                            width: 55,
-                            height: 55,
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.blueGrey,
-                                width: 1,
-                              ),
-                            ),
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              child: CachedNetworkImage(
-                                imageUrl: Provider.of<UserData>(context,
-                                        listen: false)
-                                    .getcategories[index]['icon'],
-                              ),
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 80,
                           child: Text(
                             Provider.of<UserData>(context, listen: false)
                                 .getcategories[index]['name'],
+                                textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Regular',
                               color: Colors.black,
                             ),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                );
-              },
-            ),
-          ),
-        ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

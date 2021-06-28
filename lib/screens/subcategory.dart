@@ -82,8 +82,9 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
         left: 24.0,
         right: 24.0,
       ),
-      child: ListView.builder(
+      child: GridView.builder(
         shrinkWrap: true,
+         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 4),
         scrollDirection: Axis.vertical,
         itemCount: categoryList.length,
         itemBuilder: (context, pos) {
@@ -124,12 +125,18 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage("assets/default_image.png"),
+                                  fit: BoxFit.cover,
+                                ))),
+                          Container(
+                            decoration: BoxDecoration(
                                 color: Colors.white,
                                 gradient: LinearGradient(
                                     begin: FractionalOffset.topCenter,
                                     end: FractionalOffset.bottomCenter,
                                     colors: [
-                                      Colors.black26,
+                                      Theme.of(context).accentColor,
                                       Colors.black26,
                                     ],
                                     stops: [
@@ -140,6 +147,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                           Center(
                             child: Text(
                               categoryList[pos]["name"],
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 26,
                                   color: Colors.white,
