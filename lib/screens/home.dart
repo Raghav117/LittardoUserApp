@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'chats.dart';
 import 'package:badges/badges.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -52,7 +52,6 @@ class _HomeState extends State<Home> {
   UserData userDataProvider;
 
   bool showSearchField = false;
-  
 
   @override
   void dispose() {
@@ -66,7 +65,8 @@ class _HomeState extends State<Home> {
       length: 2,
       child: Consumer<UserData>(builder: (context, userData, child) {
         userDataProvider = userData;
-        return Scaffold(extendBodyBehindAppBar: true,
+        return Scaffold(
+          extendBodyBehindAppBar: true,
           backgroundColor: Colors.transparent,
           key: _scaffoldKey,
           drawer: Drawer(child: leftDrawerMenu()),
@@ -93,22 +93,26 @@ class _HomeState extends State<Home> {
           //   indicatorColor: Colors.red,
           // ),
           body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/pattern.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/pattern.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: SafeArea(
-                          child: TabBarView(
+              child: TabBarView(
                 children: [
                   Container(
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           CategoriesListView(),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           userDataProvider.bannerOffersWidget.length > 0
                               ? buildCarouselSlider()
                               : SizedBox(),
@@ -134,7 +138,8 @@ class _HomeState extends State<Home> {
                               ],
                             ),
                           ),
-                          buildTrending(userDataProvider.gethot_deals, "hotdeals"),
+                          buildTrending(
+                              userDataProvider.gethot_deals, "hotdeals"),
                           Padding(
                             padding: const EdgeInsets.all(6.0),
                             child: Row(
@@ -154,7 +159,8 @@ class _HomeState extends State<Home> {
                               ],
                             ),
                           ),
-                          buildTrending(userDataProvider.getfeatured, "featured"),
+                          buildTrending(
+                              userDataProvider.getfeatured, "featured"),
                           Padding(
                             padding: const EdgeInsets.all(6.0),
                             child: Row(
@@ -202,17 +208,18 @@ class _HomeState extends State<Home> {
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,
                                   children: List.generate(
-                                      userDataProvider.getbrands.length, (index) {
+                                      userDataProvider.getbrands.length,
+                                      (index) {
                                     return TrendingItem(
                                       updateWishList: () {},
                                       product: Product(
                                           id: userDataProvider.getbrands[index]
                                                   ["id"]
                                               .toString(),
-                                          name: userDataProvider.getbrands[index]
-                                              ["name"],
-                                          icon: userDataProvider.getbrands[index]
-                                              ["logo"],
+                                          name: userDataProvider
+                                              .getbrands[index]["name"],
+                                          icon: userDataProvider
+                                              .getbrands[index]["logo"],
                                           type: "brand"),
                                       gradientColors: [
                                         Color(0XFFa466ec),
@@ -575,6 +582,26 @@ class _HomeState extends State<Home> {
 //            },
 //          ),
           ListTile(
+            leading: Icon(
+              Icons.chat,
+              color: blackColor,
+            ),
+            title: Text(
+              'Chats',
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.w600, color: blackColor),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.fade,
+                  child: Chats(),
+                ),
+              );
+            },
+          ),
+          ListTile(
             trailing: Icon(
               Ionicons.getIconData('ios-radio-button-on'),
               color: Color(0xFF3c3790),
@@ -590,44 +617,41 @@ class _HomeState extends State<Home> {
               Nav.route(context, NotificationPage());
             },
           ),
-         ListTile(
-           
-           leading:
-               Icon(Icons.subscriptions_outlined, color: blackColor),
-           title: Text('Subscription',
-               style: TextStyle(
-                   fontSize: 16,
-                   fontWeight: FontWeight.w600,
-                   color: blackColor)),
-           onTap: () {
-             Navigator.push(
-               context,
-               PageTransition(
-                 type: PageTransitionType.fade,
-                 child: SubCategory(),
-               ),
-             );
-           },
-         ),
-         ListTile(
-           
-           leading:
-               Icon(Icons.subscriptions, color: blackColor),
-           title: Text('Subscribed Packages',
-               style: TextStyle(
-                   fontSize: 16,
-                   fontWeight: FontWeight.w600,
-                   color: blackColor)),
-           onTap: () {
-             Navigator.push(
-               context,
-               PageTransition(
-                 type: PageTransitionType.fade,
-                 child: SubscribedPackage(),
-               ),
-             );
-           },
-         ),
+
+          ListTile(
+            leading: Icon(Icons.subscriptions_outlined, color: blackColor),
+            title: Text('Subscription',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: blackColor)),
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.fade,
+                  child: SubCategory(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.subscriptions, color: blackColor),
+            title: Text('Subscribed Packages',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: blackColor)),
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.fade,
+                  child: SubscribedPackage(),
+                ),
+              );
+            },
+          ),
           ListTile(
             leading: Icon(Feather.getIconData('list'), color: blackColor),
             title: Text('My Orders',
@@ -774,10 +798,9 @@ class CategoriesListView extends StatelessWidget {
                     type: PageTransitionType.fade,
                     ctx: context,
                     child: SubCategoryPage(
-                      categoryId:
-                          Provider.of<UserData>(context, listen: false)
-                              .getcategories[index]["id"]
-                              .toString(),
+                      categoryId: Provider.of<UserData>(context, listen: false)
+                          .getcategories[index]["id"]
+                          .toString(),
                       categoryName:
                           Provider.of<UserData>(context, listen: false)
                               .getcategories[index]["name"],
@@ -787,19 +810,22 @@ class CategoriesListView extends StatelessWidget {
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Card( elevation: 4,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft:Radius.circular(20),bottomRight:Radius.circular(20))),
-                  
-                                  child: Column(
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20))),
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
                         width: 50,
                         height: 50,
                         child: CachedNetworkImage(
-                          imageUrl: Provider.of<UserData>(context,
-                                  listen: false)
-                              .getcategories[index]['icon'],
+                          imageUrl:
+                              Provider.of<UserData>(context, listen: false)
+                                  .getcategories[index]['icon'],
                         ),
                       ),
                       Padding(
@@ -809,7 +835,7 @@ class CategoriesListView extends StatelessWidget {
                           child: Text(
                             Provider.of<UserData>(context, listen: false)
                                 .getcategories[index]['name'],
-                                textAlign: TextAlign.center,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Regular',

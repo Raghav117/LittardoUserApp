@@ -98,6 +98,21 @@ Future<Response> commeonMethod3(String url, Map data, String token,
   return response;
 }
 
+Future<Response> commeonMethod9(
+    String url, Map data, String token, BuildContext context) async {
+  Map<String, String> headers = {
+    'Authorization': "Bearer $token",
+  };
+  print(headers);
+  final response =
+      await post(url, body: data, headers: headers).catchError((err) {
+    print(err);
+    presentToast(err.toString(), context, 0);
+  });
+
+  return response;
+}
+
 bool validateEmail(String email) {
   bool emailValid = RegExp(
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
