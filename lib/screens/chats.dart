@@ -21,7 +21,9 @@ class _ChatsState extends State<Chats> {
     var response = await commeonMethod2(
         "https://chat.littardoemporium.com/api/chats/",
         Provider.of<UserData>(context, listen: false).userData['api_token']);
-    names = jsonDecode(response.body)['chats'];
+    names = jsonDecode(response.body)['chats'] == null
+        ? []
+        : jsonDecode(response.body)['chats'];
     setState(() {
       loading = false;
     });
@@ -118,7 +120,9 @@ class _ChatsState extends State<Chats> {
                             Center(
                               child: InkWell(
                                 onTap: () {
-                                  Navigator.pop(context, true);
+                                  if (subject.text.length > 0 &&
+                                      message.text.length > 0)
+                                    Navigator.pop(context, true);
                                 },
                                 child: Container(
                                   color: Color(0xFFf3b656),
