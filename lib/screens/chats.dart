@@ -123,6 +123,37 @@ class _ChatsState extends State<Chats> {
                                   if (subject.text.length > 0 &&
                                       message.text.length > 0)
                                     Navigator.pop(context, true);
+                                  else {
+                                    showDialog(
+                                        context: context,
+                                        child: Dialog(
+                                          child: Container(
+                                            height: 150,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Text(
+                                                    "Subject and Message both are mandatory"),
+                                                InkWell(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Container(
+                                                    color: Color(0xFFf3b656),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text("Okay"),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ));
+                                  }
                                 },
                                 child: Container(
                                   color: Color(0xFFf3b656),
