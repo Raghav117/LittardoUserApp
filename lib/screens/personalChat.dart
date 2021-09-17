@@ -45,7 +45,8 @@ class _PersonalChatState extends State<PersonalChat> {
         message.text = "";
       });
     }
-    controller.jumpTo(controller.position.maxScrollExtent);
+    if (chats.length > 20)
+      controller.jumpTo(controller.position.maxScrollExtent);
   }
 
   bool isLoading = false;
