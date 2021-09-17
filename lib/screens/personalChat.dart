@@ -87,40 +87,42 @@ class _PersonalChatState extends State<PersonalChat> {
               children: [
                 Expanded(
                   child: Container(
-                      child: ListView(
-                    controller: controller,
-                    children: chats.map((e) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: e["from"] == "user"
-                                  ? Alignment.centerRight
-                                  : Alignment.centerLeft,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Color(0xFFf3b656)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(e["message"]),
+                      child: SingleChildScrollView(
+                          controller: controller,
+                          child: Column(
+                            children: chats.map((e) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      alignment: e["from"] == "user"
+                                          ? Alignment.centerRight
+                                          : Alignment.centerLeft,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: Color(0xFFf3b656)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(e["message"]),
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                        alignment: e["from"] == "user"
+                                            ? Alignment.centerRight
+                                            : Alignment.centerLeft,
+                                        child: Text(
+                                          e["created_at"],
+                                          style: TextStyle(fontSize: 10),
+                                        ))
+                                  ],
                                 ),
-                              ),
-                            ),
-                            Align(
-                                alignment: e["from"] == "user"
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                child: Text(
-                                  e["created_at"],
-                                  style: TextStyle(fontSize: 10),
-                                ))
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  )),
+                              );
+                            }).toList(),
+                          ))),
                 ),
                 isLoading == true
                     ? Center(
